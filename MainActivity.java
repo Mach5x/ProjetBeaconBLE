@@ -22,6 +22,16 @@ public Class MainActivity extends Activity{
       public void onClick(final View v) {
       // action à exectuter
       
+      
+    //obtenir l'appareil qui possède le bluetooth LE et demande à l'activer si l'appareil est déconnecté
+    BluetoothManager btManager = (BluetoothManager)getSystemService(Context.BLUETOOTH_SERVICE);
+ 
+    BluetoothAdapter btAdapter = btManager.getAdapter();
+    if (btAdapter != null && !btAdapter.isEnabled()) {
+    Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);  
+    startActivityForResult(enableIntent,REQUEST_ENABLE_BT);
+    }
+    
         }
       });
         
