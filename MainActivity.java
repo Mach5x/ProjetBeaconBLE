@@ -5,7 +5,7 @@ import android.bluetooth.*;
 import android.os.*;
 import android.view.View;
 import android.widget.Button;
-
+import android.content.*;
 
 public Class MainActivity extends Activity{
   
@@ -21,6 +21,22 @@ public Class MainActivity extends Activity{
       @Override
       public void onClick(final View v) {
       // action à exectuter
+      
+    //lance la recherche d'appareils
+    btAdapter.startLeScan(leScanCallback);
+    
+    //arrête la recherche d'appareils
+    btAdapter.stopLeScan(leScanCallback);
+    
+    
+      
+    //fonction qui est implémenté à chaque fois qu'un nouvel appareil est découvert
+    private BluetoothAdapter.LeScanCallback leScanCallback = new BluetoothAdapter.LeScanCallback() {
+    @Override
+    public void onLeScan(final BluetoothDevice device, final int rssi, final byte[] scanRecord) {
+        // your implementation here
+    }
+    }
       
       
     //obtenir l'appareil qui possède le bluetooth LE et demande à l'activer si l'appareil est déconnecté
