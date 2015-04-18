@@ -8,12 +8,24 @@ import android.widget.Button;
 import android.content.*;
 
 public Class MainActivity extends Activity{
-  
+private bluetoothAdapter btAdapter;
+private bluetoothManager btManager;
+
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_principale);
-
+  
+  
+    //obtenir l'appareil qui possède le bluetooth LE et demande à l'activer si l'appareil est déconnecté
+    btManager = (BluetoothManager)getSystemService(Context.BLUETOOTH_SERVICE);
+ 
+    btAdapter = btManager.getAdapter();
+    if (btAdapter != null && !btAdapter.isEnabled()) {
+    Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);  
+    startActivityForResult(enableIntent,REQUEST_ENABLE_BT);
+    }
 
     // Setup the Scanning button
     final Button buttAdd = (Button) findViewById(R.id.button);
@@ -39,14 +51,6 @@ public Class MainActivity extends Activity{
     }
       
       
-    //obtenir l'appareil qui possède le bluetooth LE et demande à l'activer si l'appareil est déconnecté
-    BluetoothManager btManager = (BluetoothManager)getSystemService(Context.BLUETOOTH_SERVICE);
- 
-    BluetoothAdapter btAdapter = btManager.getAdapter();
-    if (btAdapter != null && !btAdapter.isEnabled()) {
-    Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);  
-    startActivityForResult(enableIntent,REQUEST_ENABLE_BT);
-    }
     
         }
       });
