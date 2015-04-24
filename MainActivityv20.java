@@ -18,8 +18,12 @@ public class MainActivity extends Activity {
     private LeDeviceListAdapter mLeDeviceListAdapter;
     private BluetoothAdapter btAdapter;
     private BluetoothManager btManager;
+    private boolean mScanning;
+    private Handler mHandler;
 
     private static final int REQUEST_ENABLE_BT=1;
+    // Stops scanning after 10 seconds.
+    private static final long SCAN_PERIOD = 10000;
 
 
         @Override
@@ -40,15 +44,32 @@ public class MainActivity extends Activity {
                 public void onClick(final View v) {
 // action à exectuter
 //lance la recherche d'appareils
-                    btAdapter.startLeScan(leScanCallback);
-//arrête la recherche d'appareils
-                    btAdapter.stopLeScan(leScanCallback);
-
+                   scanLeDevice(true);
+                   
                 }
             });
         }
 
+ private void scanLeDevice(final boolean enable) {
+        if (enable) {
+            // Stops scanning after a pre-defined scan period.
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mScanning = false;
+                    btAdapter.stopLeScan(mLeScanCallback);
+                    invalidateOptionsMenu();
+                }
+            }, SCAN_PERIOD);
 
+            mScanning = true;
+            btAdapter.startLeScan(mLeScanCallback);
+        } else {
+            mScanning = false;
+            btAdapter.stopLeScan(mLeScanCallback);
+        }
+        invalidateOptionsMenu();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
